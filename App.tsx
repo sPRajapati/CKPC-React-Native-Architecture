@@ -6,9 +6,11 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import '@/i18n';
 import { store } from '@/store';
 import { queryClient, setupInterceptors } from '@/api';
+import { setupSslPinning } from '@/shared/security';
 import { RootNavigator } from '@/navigation/RootNavigator';
 
-// Attach axios interceptors once, after the store module has initialized.
+// Enable pinning first (no-op until you add pins), then attach interceptors.
+setupSslPinning();
 setupInterceptors();
 
 export default function App() {

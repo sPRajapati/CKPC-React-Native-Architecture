@@ -1,0 +1,16 @@
+{
+  "auth": {
+    "login": "Iniciar sesión",
+    "signup": "Registrarse",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "firstName": "Nombre",
+    "lastName": "Apellido",
+    "noAccount": "¿No tienes una cuenta?",
+    "hasAccount": "¿Ya tienes una cuenta?"
+  },
+  "home": {
+    "title": "Inicio",
+    "empty": "Aún no hay nada"
+  }
+}

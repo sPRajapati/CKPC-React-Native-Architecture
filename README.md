@@ -44,3 +44,22 @@ npm run start      # then press i / a, or scan with Expo Go dev build
 ```
 
 Set `EXPO_PUBLIC_API_URL` in a `.env` file (see `.env.example`).
+
+## Localization
+
+`src/i18n` uses i18next with **English (`en`)** and **Spanish (`es`)**. The device
+language is auto-detected and falls back to English. Add a language by dropping a
+`locales/<lng>.json` file and registering it in `src/i18n/index.ts`.
+
+## Security — SSL pinning
+
+SSL public-key pinning is scaffolded in `src/shared/security/sslPinning.ts` but
+**disabled by default** (empty pin list = no-op), so the app runs without any
+native module. To turn it on once you have your API certificate:
+
+1. `npm install react-native-ssl-public-key-pinning --legacy-peer-deps`
+2. add `"react-native-ssl-public-key-pinning"` to `plugins` in `app.json`
+3. `npx expo prebuild && npx expo run:android` (native module — not Expo Go)
+4. fill `PINNED_HOSTS` with your host + SPKI SHA-256 hashes (include a backup pin)
+
+See the file header for the `openssl` command that generates the hashes.

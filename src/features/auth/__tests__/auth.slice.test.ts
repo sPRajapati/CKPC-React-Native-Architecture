@@ -1,6 +1,7 @@
 import authReducer, {
   clearAuth,
   setError,
+  setTokens,
   loginThunk,
   hydrateAuth,
 } from '../auth.slice';
@@ -39,6 +40,14 @@ describe('auth slice', () => {
     const cleared = authReducer(filled, clearAuth());
     expect(cleared.token).toBeNull();
     expect(cleared.user).toBeNull();
+  });
+
+  it('updates tokens via setTokens (refresh)', () => {
+    const filled = authReducer(undefined, loginThunk.fulfilled(authData, 'id', arg));
+    const next = authReducer(filled, setTokens({ token: 'new-token', refreshToken: 'new-refresh' }));
+    expect(next.token).toBe('new-token');
+    expect(next.refreshToken).toBe('new-refresh');
+    expect(next.user?.email).toBe('user@example.com');
   });
 
   it('restores a session via hydrateAuth', () => {

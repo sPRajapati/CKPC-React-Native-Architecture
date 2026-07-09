@@ -1,4 +1,5 @@
-import { api, HOME_ENDPOINTS } from '@/api';
+import { api } from '@/api/axios';
+import { HOME_ENDPOINTS } from '@/api/endpoints';
 import { REAL_API, USE_REAL_API } from '@/shared/config';
 import type { ApiResponse } from '@/shared/types';
 import type { FeedItem } from '../home.types';

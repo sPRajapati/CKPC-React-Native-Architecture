@@ -58,6 +58,7 @@ export const resolveDevMock = (
     return ok({ success: false, message: 'Invalid credentials (dev mock)' }, config);
   }
   if (url.includes('/auth/signup')) return ok(authData, config);
+  if (url.includes('/auth/refresh')) return ok(authData, config);
   if (url.includes('/auth/logout')) {
     return ok({ success: true, data: { message: 'ok' } }, config);
   }

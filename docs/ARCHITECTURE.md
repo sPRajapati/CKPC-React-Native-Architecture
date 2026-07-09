@@ -191,5 +191,8 @@ React Query; client/session/UI state → Redux.
 - **Theme + language** — DONE: both persist and restore on startup.
 - **SSL pinning** — scaffolded in `shared/security/sslPinning.ts`, disabled until
   pins are added.
-- **Token refresh** — `refreshToken` is stored; add a refresh flow in the
-  response interceptor before the 401 → logout fallback.
+- **Token refresh** — DONE: on 401 the interceptor calls `refreshSession()`
+  (de-duplicated) and retries once before falling back to logout.
+- **Resilience/observability** — global `ErrorBoundary`, a toast system
+  (`shared/feedback`), and a vendor-agnostic `monitoring` seam are wired; React
+  Query errors report + toast automatically.

@@ -7,6 +7,6 @@ module.exports = {
     '^@/(.*)$': '<rootDir>/src/$1',
   },
   transformIgnorePatterns: [
-    'node_modules/(?!((jest-)?react-native|@react-native(-community)?|expo(nent)?|@expo(nent)?/.*|@react-navigation/.*|@reduxjs/toolkit|react-redux|@tanstack/.*))',
+    'node_modules/(?!((jest-)?react-native|@react-native(-community)?|expo(nent)?|@expo(nent)?/.*|@react-navigation/.*|@reduxjs/toolkit|react-redux|redux|reselect|immer|@tanstack/.*))',
   ],
 };

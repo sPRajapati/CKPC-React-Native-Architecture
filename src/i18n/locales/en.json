@@ -12,5 +12,12 @@
   "home": {
     "title": "Home",
     "empty": "Nothing here yet"
+  },
+  "settings": {
+    "title": "Settings",
+    "darkMode": "Dark mode",
+    "notifications": "Notifications",
+    "spanish": "Español",
+    "logout": "Log out"
   }
 }

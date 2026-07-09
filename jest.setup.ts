@@ -1,2 +1,16 @@
-// Global test setup. Silence noisy dev warnings and add RTL matchers if needed.
-import '@testing-library/react-native/extend-expect';
+// @testing-library/react-native v12+ includes its matchers automatically.
+
+jest.mock('@react-native-async-storage/async-storage', () =>
+  require('@react-native-async-storage/async-storage/jest/async-storage-mock'),
+);
+
+jest.mock('expo-secure-store', () => ({
+  getItemAsync: jest.fn(async () => null),
+  setItemAsync: jest.fn(async () => undefined),
+  deleteItemAsync: jest.fn(async () => undefined),
+}));
+
+jest.mock('@react-native-community/netinfo', () => ({
+  addEventListener: jest.fn(() => jest.fn()),
+  fetch: jest.fn(async () => ({ isConnected: true })),
+}));

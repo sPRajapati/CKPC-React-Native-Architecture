@@ -1,18 +1,11 @@
 import { AxiosError } from 'axios';
 import { store } from '@/store';
-import { clearAuth } from '@/features/auth/auth.slice';
-import { navigationRef } from '@/navigation/RootNavigation';
-import { APP_ROUTES } from '@/navigation/routes';
+import { coordinateLogout } from '@/shared/session/logoutCoordinator';
 import { api } from './axios';
 import { resolveDevMock } from './devMock';
 
 let installed = false;
 
-/**
- * Attaches auth token + 401 handling. Called once at app start (after the store
- * exists), so `api` doesn't have to import the store at module load — which is
- * what previously created the require cycle.
- */
 export const setupInterceptors = () => {
   if (installed) return;
   installed = true;
@@ -32,15 +25,9 @@ export const setupInterceptors = () => {
       const mock = resolveDevMock(error.config);
       if (mock) return mock;
 
+      // Session expired — force logout without calling the API (avoids a loop).
       if (error.response?.status === 401) {
-        store.dispatch(clearAuth());
-        const current = navigationRef.current?.getCurrentRoute()?.name;
-        if (current !== APP_ROUTES.LOGIN) {
-          navigationRef.current?.reset({
-            index: 0,
-            routes: [{ name: APP_ROUTES.LOGIN }],
-          });
-        }
+        void coordinateLogout({ callApi: false });
       }
       return Promise.reject(error);
     },

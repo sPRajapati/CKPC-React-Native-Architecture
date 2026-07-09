@@ -7,21 +7,26 @@ import '@/i18n';
 import { store } from '@/store';
 import { queryClient, setupInterceptors } from '@/api';
 import { setupSslPinning } from '@/shared/security';
+import { ThemeProvider } from '@/shared/theme';
+import { AppBootstrap } from '@/app/AppBootstrap';
 import { RootNavigator } from '@/navigation/RootNavigator';
 
-// Enable pinning first (no-op until you add pins), then attach interceptors.
 setupSslPinning();
 setupInterceptors();
 
 export default function App() {
   return (
     <Provider store={store}>
-      <QueryClientProvider client={queryClient}>
-        <SafeAreaProvider>
-          <StatusBar style="auto" />
-          <RootNavigator />
-        </SafeAreaProvider>
-      </QueryClientProvider>
+      <ThemeProvider>
+        <QueryClientProvider client={queryClient}>
+          <SafeAreaProvider>
+            <StatusBar style="auto" />
+            <AppBootstrap>
+              <RootNavigator />
+            </AppBootstrap>
+          </SafeAreaProvider>
+        </QueryClientProvider>
+      </ThemeProvider>
     </Provider>
   );
 }

@@ -1,7 +1,12 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { getErrorMessage } from '@/shared/utils';
+import { storageUtils } from '@/shared/storage';
 import type { AuthData, AuthState, LoginPayload, SignupPayload } from './auth.types';
-import { login as loginService, signup as signupService, logout as logoutService } from './services';
+import {
+  login as loginService,
+  signup as signupService,
+  logout as logoutService,
+} from './services';
 
 const initialState: AuthState = {
   token: null,
@@ -11,12 +16,19 @@ const initialState: AuthState = {
   error: null,
 };
 
+const persistAuth = async (data: AuthData) => {
+  await storageUtils.saveAuthToken(data.token);
+  if (data.refreshToken) await storageUtils.saveRefreshToken(data.refreshToken);
+  await storageUtils.saveUser(data.user);
+};
+
 export const loginThunk = createAsyncThunk<AuthData, LoginPayload>(
   'auth/login',
   async (payload, { rejectWithValue }) => {
     try {
       const res = await loginService(payload);
       if (!res.success) throw new Error(res.message ?? 'Login failed');
+      await persistAuth(res.data);
       return res.data;
     } catch (err) {
       return rejectWithValue(getErrorMessage(err));
@@ -30,6 +42,7 @@ export const signupThunk = createAsyncThunk<AuthData, SignupPayload>(
     try {
       const res = await signupService(payload);
       if (!res.success) throw new Error(res.message ?? 'Signup failed');
+      await persistAuth(res.data);
       return res.data;
     } catch (err) {
       return rejectWithValue(getErrorMessage(err));
@@ -40,10 +53,24 @@ export const signupThunk = createAsyncThunk<AuthData, SignupPayload>(
 export const logoutThunk = createAsyncThunk('auth/logout', async () => {
   try {
     await logoutService();
-  } catch {
-    // ignore remote failure; local session is cleared regardless
+  } finally {
+    await storageUtils.clearAuthData();
   }
 });
+
+/** Restores a persisted session on app start. */
+export const hydrateAuth = createAsyncThunk<AuthData | null>(
+  'auth/hydrate',
+  async () => {
+    const [token, refreshToken, user] = await Promise.all([
+      storageUtils.getAuthToken(),
+      storageUtils.getRefreshToken(),
+      storageUtils.getUser(),
+    ]);
+    if (token && user) return { token, refreshToken: refreshToken ?? undefined, user };
+    return null;
+  },
+);
 
 const authSlice = createSlice({
   name: 'auth',
@@ -82,7 +109,11 @@ const authSlice = createSlice({
         state.loading = false;
         state.error = (action.payload as string) ?? 'Signup failed';
       })
-      .addCase(logoutThunk.fulfilled, () => initialState);
+      .addCase(logoutThunk.fulfilled, () => initialState)
+      .addCase(logoutThunk.rejected, () => initialState)
+      .addCase(hydrateAuth.fulfilled, (state, action) => {
+        if (action.payload) applyAuth(state, action.payload);
+      });
   },
 });
 

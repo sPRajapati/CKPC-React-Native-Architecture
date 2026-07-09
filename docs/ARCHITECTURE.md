@@ -184,12 +184,12 @@ React Query; client/session/UI state → Redux.
 
 ---
 
-## Extension points (not yet wired)
+## Extension points
 
-- **Session persistence** — the token currently lives in Redux memory only, so it
-  is lost on app restart. To persist, save the token to `expo-secure-store` in
-  `applyAuth`/a middleware and rehydrate on startup with a `hydrateAuth` thunk.
+- **Session persistence** — DONE: the token is saved to SecureStore and the user
+  to AsyncStorage on login; `hydrateAuth` restores the session at startup.
+- **Theme + language** — DONE: both persist and restore on startup.
 - **SSL pinning** — scaffolded in `shared/security/sslPinning.ts`, disabled until
   pins are added.
-- **Token refresh** — `refreshToken` is stored in state; add a refresh flow in the
-  response interceptor before the `401 → logout` fallback.
+- **Token refresh** — `refreshToken` is stored; add a refresh flow in the
+  response interceptor before the 401 → logout fallback.

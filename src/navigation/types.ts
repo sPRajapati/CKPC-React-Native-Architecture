@@ -3,6 +3,8 @@ export type AuthStackParamList = {
   Signup: undefined;
 };
 
-export type AppStackParamList = {
+export type AppTabParamList = {
   Home: undefined;
+  Profile: undefined;
+  Settings: undefined;
 };

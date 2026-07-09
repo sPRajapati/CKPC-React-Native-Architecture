@@ -5,6 +5,7 @@ export {
   loginThunk,
   signupThunk,
   logoutThunk,
+  hydrateAuth,
   clearAuth,
   setError,
 } from './auth.slice';

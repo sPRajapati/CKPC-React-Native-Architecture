@@ -21,11 +21,8 @@ export const setupInterceptors = () => {
   api.interceptors.response.use(
     (response) => response,
     (error: AxiosError) => {
-      // In dev with no backend, serve canned responses for known endpoints.
       const mock = resolveDevMock(error.config);
       if (mock) return mock;
-
-      // Session expired — force logout without calling the API (avoids a loop).
       if (error.response?.status === 401) {
         void coordinateLogout({ callApi: false });
       }

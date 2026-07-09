@@ -1,4 +1,8 @@
-import { createNavigationContainerRef } from '@react-navigation/native';
+import {
+  createNavigationContainerRef,
+  type ParamListBase,
+} from '@react-navigation/native';
 
-// Allows non-component code (e.g. the axios 401 handler) to navigate.
-export const navigationRef = createNavigationContainerRef();
+// Typed with ParamListBase so non-component code (e.g. the axios 401 handler)
+// can read getCurrentRoute().name and call reset() with route names.
+export const navigationRef = createNavigationContainerRef<ParamListBase>();

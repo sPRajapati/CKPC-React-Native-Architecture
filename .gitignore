@@ -5,6 +5,9 @@ web-build/
 *.log
 .env
 .env.local
-ios/
-android/
+ios/Pods/
+ios/build/
+android/.gradle/
+android/build/
+android/app/build/
 .DS_Store

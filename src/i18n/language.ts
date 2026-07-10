@@ -1,7 +1,7 @@
 import { storageUtils } from '@/shared/storage';
 import i18n from './index';
 
-export const SUPPORTED_LANGUAGES = ['en', 'es'] as const;
+export const SUPPORTED_LANGUAGES = ['en', 'es', 'hi', 'te'] as const;
 export type Language = (typeof SUPPORTED_LANGUAGES)[number];
 
 const isSupported = (lng: string): lng is Language =>

@@ -1,0 +1,43 @@
+{
+  "app": {
+    "name": "आरएन आर्किटेक्चर ऐप",
+    "welcome": "स्वागत है"
+  },
+  "auth": {
+    "login": "लॉगिन",
+    "signup": "साइन अप",
+    "email": "ईमेल",
+    "password": "पासवर्ड",
+    "confirmPassword": "पासवर्ड की पुष्टि करें",
+    "forgotPassword": "पासवर्ड भूल गए?",
+    "noAccount": "खाता नहीं है?",
+    "hasAccount": "पहले से खाता है?"
+  },
+  "home": {
+    "title": "होम",
+    "searchPlaceholder": "उत्पाद खोजें..."
+  },
+  "profile": {
+    "title": "प्रोफ़ाइल",
+    "followers": "फॉलोअर्स",
+    "following": "फॉलोइंग",
+    "posts": "पोस्ट"
+  },
+  "settings": {
+    "title": "सेटिंग्स",
+    "language": "भाषा",
+    "confirmLanguageTitle": "भाषा बदलें?",
+    "confirmLanguageMessage": "क्या आप वाकई चुनना चाहते हैं",
+    "notifications": "सूचनाएं",
+    "darkMode": "डार्क मोड",
+    "logout": "लॉगआउट"
+  },
+  "common": {
+    "loading": "लोड हो रहा है...",
+    "error": "कुछ गलत हो गया",
+    "retry": "पुनः प्रयास करें",
+    "save": "सहेजें",
+    "cancel": "रद्द करें",
+    "reload": "रीलोड"
+  }
+}

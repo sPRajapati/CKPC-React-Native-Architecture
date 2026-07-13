@@ -28,6 +28,15 @@ export const requestCameraPermission = async (): Promise<PermissionStatus> => {
   return normalize((await request()).status);
 };
 
+export const checkCameraPermission = async (): Promise<PermissionStatus> => {
+  const mod = await loadModule('expo-camera');
+  const request = (mod?.getCameraPermissionsAsync ??
+    (mod?.Camera as { getCameraPermissionsAsync?: Requester } | undefined)
+      ?.getCameraPermissionsAsync) as Requester | undefined;
+  if (!request) return 'unavailable';
+  return normalize((await request()).status);
+};
+
 export const requestLocationPermission = async (): Promise<PermissionStatus> => {
   const mod = await loadModule('expo-location');
   const request = mod?.requestForegroundPermissionsAsync as Requester | undefined;
@@ -35,9 +44,23 @@ export const requestLocationPermission = async (): Promise<PermissionStatus> => 
   return normalize((await request()).status);
 };
 
+export const checkLocationPermission = async (): Promise<PermissionStatus> => {
+  const mod = await loadModule('expo-location');
+  const request = mod?.getForegroundPermissionsAsync as Requester | undefined;
+  if (!request) return 'unavailable';
+  return normalize((await request()).status);
+};
+
 export const requestNotificationPermission = async (): Promise<PermissionStatus> => {
   const mod = await loadModule('expo-notifications');
   const request = mod?.requestPermissionsAsync as Requester | undefined;
+  if (!request) return 'unavailable';
+  return normalize((await request()).status);
+};
+
+export const checkNotificationPermission = async (): Promise<PermissionStatus> => {
+  const mod = await loadModule('expo-notifications');
+  const request = mod?.getPermissionsAsync as Requester | undefined;
   if (!request) return 'unavailable';
   return normalize((await request()).status);
 };

@@ -11,6 +11,10 @@
     "lint": "eslint . --ext .js,.ts,.tsx",
     "test": "jest",
     "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "build:brand": "expo prebuild && expo run:ios && expo run:android",
+    "build:brand:ios": "expo prebuild && expo run:ios",
+    "build:brand:android": "expo prebuild && expo run:android",
     "prepare": "husky"
   },
   "dependencies": {
@@ -30,11 +34,13 @@
     "i18next": "^23.15.1",
     "lucide-react-native": "^1.21.0",
     "react": "19.2.3",
+    "react-dom": "19.2.3",
     "react-i18next": "^15.0.2",
     "react-native": "0.85.3",
     "react-native-safe-area-context": "^5.8.0",
     "react-native-screens": "^4.25.2",
     "react-native-svg": "15.15.4",
+    "react-native-web": "^0.21.2",
     "react-redux": "^9.3.0"
   },
   "devDependencies": {

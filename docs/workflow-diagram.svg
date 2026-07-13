@@ -1,0 +1,110 @@
+<svg viewBox="0 0 960 730" width="960" height="730" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">
+  <title>CKPC React Native — application and API request workflow</title>
+  <desc>Top: app launch initializes interceptors and SSL, restores session/theme/language, then RootNavigator routes to Auth stack when signed out or Tabs when signed in. Bottom: an API request flows from UI screen to logic hook, splitting into Redux thunk for writes and React Query for reads, down through the service layer, axios interceptors, to the network or dev mock, with token attach, 401 refresh, and error toasts.</desc>
+
+  <defs>
+    <marker id="arN" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="#6B7280"/>
+    </marker>
+    <marker id="arI" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="#2E75B6"/>
+    </marker>
+  </defs>
+
+  <style>
+    .box{fill:#FFFFFF;stroke:#CBD5E1;stroke-width:1.5;}
+    .acc{fill:#FFFFFF;stroke:#2E75B6;stroke-width:1.8;}
+    .lbl{fill:#111827;font-size:13px;font-weight:600;}
+    .sub{fill:#6B7280;font-size:11.5px;}
+    .sec{fill:#1F3A5F;font-size:15px;font-weight:700;}
+    .arl{fill:#6B7280;font-size:11px;}
+    .flow{stroke:#6B7280;stroke-width:1.6;fill:none;}
+    .flowi{stroke:#2E75B6;stroke-width:1.6;fill:none;}
+    .cap{fill:#2E75B6;font-size:12px;font-weight:700;}
+    text{dominant-baseline:middle;}
+  </style>
+
+  <rect x="0" y="0" width="960" height="730" fill="#FFFFFF"/>
+
+  <text class="sec" x="30" y="26">Application flow</text>
+
+  <rect class="box" x="30" y="46" width="196" height="50" rx="8"/>
+  <text class="lbl" x="128" y="65" text-anchor="middle">App launch</text>
+  <text class="sub" x="128" y="81" text-anchor="middle">index.ts &#8594; App.tsx</text>
+
+  <rect class="box" x="256" y="46" width="210" height="50" rx="8"/>
+  <text class="lbl" x="361" y="65" text-anchor="middle">Init providers</text>
+  <text class="sub" x="361" y="81" text-anchor="middle">interceptors + SSL pinning</text>
+
+  <rect class="box" x="496" y="46" width="222" height="50" rx="8"/>
+  <text class="lbl" x="607" y="65" text-anchor="middle">Bootstrap restore</text>
+  <text class="sub" x="607" y="81" text-anchor="middle">session &#183; theme &#183; language</text>
+
+  <rect class="box" x="748" y="46" width="182" height="50" rx="8"/>
+  <text class="lbl" x="839" y="65" text-anchor="middle">RootNavigator</text>
+  <text class="sub" x="839" y="81" text-anchor="middle">auth gate</text>
+
+  <line class="flow" x1="226" y1="71" x2="252" y2="71" marker-end="url(#arN)"/>
+  <line class="flow" x1="466" y1="71" x2="492" y2="71" marker-end="url(#arN)"/>
+  <line class="flow" x1="718" y1="71" x2="744" y2="71" marker-end="url(#arN)"/>
+
+  <rect class="box" x="496" y="128" width="210" height="50" rx="8"/>
+  <text class="lbl" x="601" y="147" text-anchor="middle">Auth stack</text>
+  <text class="sub" x="601" y="163" text-anchor="middle">Login &#183; Signup</text>
+
+  <rect class="box" x="724" y="128" width="206" height="50" rx="8"/>
+  <text class="lbl" x="827" y="147" text-anchor="middle">Tab app</text>
+  <text class="sub" x="827" y="163" text-anchor="middle">Home &#183; Profile &#183; Settings</text>
+
+  <path class="flow" d="M839,96 L839,112 L827,112 L827,126" marker-end="url(#arN)"/>
+  <path class="flow" d="M839,96 L839,112 L601,112 L601,126" marker-end="url(#arN)"/>
+  <text class="arl" x="611" y="110">token = null</text>
+  <text class="arl" x="843" y="110">token set</text>
+
+  <line x1="30" y1="200" x2="930" y2="200" stroke="#E5E7EB" stroke-width="1" stroke-dasharray="4 4"/>
+
+  <text class="sec" x="30" y="224">API request flow</text>
+
+  <rect class="box" x="120" y="242" width="330" height="46" rx="8"/>
+  <text class="lbl" x="285" y="265" text-anchor="middle">UI screen — LoginScreen / HomeScreen</text>
+
+  <rect class="box" x="120" y="308" width="330" height="46" rx="8"/>
+  <text class="lbl" x="285" y="331" text-anchor="middle">Logic hook — useAuthForm / useHomeData</text>
+
+  <rect class="box" x="60" y="374" width="210" height="46" rx="8"/>
+  <text class="lbl" x="165" y="392" text-anchor="middle">Redux thunk</text>
+  <text class="sub" x="165" y="408" text-anchor="middle">writes: login / signup</text>
+
+  <rect class="box" x="300" y="374" width="210" height="46" rx="8"/>
+  <text class="lbl" x="405" y="392" text-anchor="middle">React Query</text>
+  <text class="sub" x="405" y="408" text-anchor="middle">reads: feed</text>
+
+  <rect class="box" x="120" y="440" width="330" height="46" rx="8"/>
+  <text class="lbl" x="285" y="463" text-anchor="middle">Service — feature .api.ts (typed)</text>
+
+  <rect class="acc" x="120" y="506" width="330" height="46" rx="8"/>
+  <text class="lbl" x="285" y="529" text-anchor="middle">Axios instance + Interceptors</text>
+
+  <rect class="box" x="120" y="572" width="330" height="46" rx="8"/>
+  <text class="lbl" x="285" y="595" text-anchor="middle">Network API  &#183;  __DEV__ mock</text>
+
+  <line class="flow" x1="285" y1="288" x2="285" y2="306" marker-end="url(#arN)"/>
+  <path class="flow" d="M285,354 L285,364 L165,364 L165,372" marker-end="url(#arN)"/>
+  <path class="flow" d="M285,354 L285,364 L405,364 L405,372" marker-end="url(#arN)"/>
+  <path class="flow" d="M165,420 L165,430 L285,430 L285,438" marker-end="url(#arN)"/>
+  <path class="flow" d="M405,420 L405,430 L285,430"/>
+  <line class="flow" x1="285" y1="486" x2="285" y2="504" marker-end="url(#arN)"/>
+  <line class="flowi" x1="285" y1="552" x2="285" y2="570" marker-end="url(#arI)"/>
+
+  <rect class="acc" x="520" y="440" width="410" height="178" rx="10"/>
+  <text class="cap" x="540" y="465">Transport concerns</text>
+  <text class="lbl" x="540" y="497" font-size="12">Request</text>
+  <text class="sub" x="606" y="497">&#8594; attach Bearer token</text>
+  <text class="lbl" x="540" y="529" font-size="12">401</text>
+  <text class="sub" x="606" y="529">&#8594; refreshSession &#8594; retry once &#8594; logout</text>
+  <text class="lbl" x="540" y="561" font-size="12">Errors</text>
+  <text class="sub" x="606" y="561">&#8594; getErrorMessage &#8594; toast + monitor</text>
+  <text class="sub" x="540" y="593" font-style="italic">Response flows back up &#8594; Redux / RQ &#8594; UI</text>
+
+  <line class="flowi" x1="450" y1="529" x2="518" y2="529" stroke-dasharray="4 3" marker-end="url(#arI)"/>
+</svg>

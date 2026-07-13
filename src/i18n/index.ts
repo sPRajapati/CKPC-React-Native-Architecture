@@ -4,10 +4,8 @@ import { getLocales } from 'expo-localization';
 
 import en from './locales/en.json';
 import es from './locales/es.json';
-import hi from './locales/hi.json';
-import te from './locales/te.json';
 
-const SUPPORTED = ['en', 'es', 'hi', 'te'] as const;
+const SUPPORTED = ['en', 'es'] as const;
 type Supported = (typeof SUPPORTED)[number];
 
 const deviceLanguage = getLocales()[0]?.languageCode ?? 'en';
@@ -19,8 +17,6 @@ i18n.use(initReactI18next).init({
   resources: {
     en: { translation: en },
     es: { translation: es },
-    hi: { translation: hi },
-    te: { translation: te },
   },
   lng: initialLanguage,
   fallbackLng: 'en',

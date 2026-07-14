@@ -7,7 +7,7 @@ const cfg = (url: string, data?: object): InternalAxiosRequestConfig =>
 describe('resolveDevMock', () => {
   it('returns a success response for valid login credentials', () => {
     const res = resolveDevMock(
-      cfg('/auth/login', { email: 'test@example.com', password: 'Password123' }),
+      cfg('/auth/login', { email: 'demo@ckpc.dev', password: 'Password123' }),
     );
     expect(res?.status).toBe(200);
     expect((res?.data as { success: boolean }).success).toBe(true);

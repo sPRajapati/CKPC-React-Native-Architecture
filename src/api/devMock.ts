@@ -1,6 +1,6 @@
 import type { AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 
-const TEST_EMAIL = 'test@example.com';
+const TEST_EMAIL = 'demo@ckpc.dev';
 const TEST_PASSWORD = 'Password123';
 
 const ok = <T>(
@@ -17,8 +17,8 @@ const ok = <T>(
 const mockUser = {
   id: '1',
   email: TEST_EMAIL,
-  firstName: 'Test',
-  lastName: 'User',
+  firstName: 'CKPC',
+  lastName: 'Demo',
 };
 
 const authData = {
@@ -34,9 +34,21 @@ const authData = {
 const feedData = {
   success: true,
   data: [
-    { id: '1', title: 'Welcome', subtitle: 'This is dev-mock data' },
-    { id: '2', title: 'Feature-sliced', subtitle: 'Feature-sliced architecture in Expo' },
-    { id: '3', title: 'React Query', subtitle: 'Server state lives here' },
+    {
+      id: 'dev-1',
+      title: 'CKPC mobile dashboard',
+      subtitle: 'Offline development feed powered by local mock data.',
+    },
+    {
+      id: 'dev-2',
+      title: 'Secure sign-in flow',
+      subtitle: 'Use demo@ckpc.dev and Password123 while developing without a backend.',
+    },
+    {
+      id: 'dev-3',
+      title: 'Production API switch',
+      subtitle: 'Set EXPO_PUBLIC_USE_REAL_API=true in production env files.',
+    },
   ],
 };
 
@@ -49,7 +61,8 @@ export const resolveDevMock = (
 ): AxiosResponse | null => {
   if (!__DEV__ || !config?.url) return null;
   const url = config.url;
-  const body = config.data ? JSON.parse(config.data) : {};
+  const body =
+    typeof config.data === 'string' && config.data ? JSON.parse(config.data) : {};
 
   if (url.includes('/auth/login')) {
     if (body.email === TEST_EMAIL && body.password === TEST_PASSWORD) {

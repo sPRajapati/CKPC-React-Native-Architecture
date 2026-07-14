@@ -7,4 +7,7 @@ ios/
 *.log
 .env
 .env.local
+.env.development
+.env.production
+.env.staging
 .DS_Store

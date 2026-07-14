@@ -22,7 +22,7 @@ const persistAuth = async (data: AuthData) => {
   await storageUtils.saveUser(data.user);
 };
 
-export const loginThunk = createAsyncThunk<AuthData, LoginPayload>(
+export const loginAsync = createAsyncThunk<AuthData, LoginPayload>(
   'auth/login',
   async (payload, { rejectWithValue }) => {
     try {
@@ -36,7 +36,7 @@ export const loginThunk = createAsyncThunk<AuthData, LoginPayload>(
   },
 );
 
-export const signupThunk = createAsyncThunk<AuthData, SignupPayload>(
+export const signupAsync = createAsyncThunk<AuthData, SignupPayload>(
   'auth/signup',
   async (payload, { rejectWithValue }) => {
     try {
@@ -50,7 +50,7 @@ export const signupThunk = createAsyncThunk<AuthData, SignupPayload>(
   },
 );
 
-export const logoutThunk = createAsyncThunk('auth/logout', async () => {
+export const logoutAsync = createAsyncThunk('auth/logout', async () => {
   try {
     await logoutService();
   } finally {
@@ -100,26 +100,26 @@ const authSlice = createSlice({
     };
 
     builder
-      .addCase(loginThunk.pending, (state) => {
+      .addCase(loginAsync.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(loginThunk.fulfilled, (state, action) => applyAuth(state, action.payload))
-      .addCase(loginThunk.rejected, (state, action) => {
+      .addCase(loginAsync.fulfilled, (state, action) => applyAuth(state, action.payload))
+      .addCase(loginAsync.rejected, (state, action) => {
         state.loading = false;
         state.error = (action.payload as string) ?? 'Login failed';
       })
-      .addCase(signupThunk.pending, (state) => {
+      .addCase(signupAsync.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(signupThunk.fulfilled, (state, action) => applyAuth(state, action.payload))
-      .addCase(signupThunk.rejected, (state, action) => {
+      .addCase(signupAsync.fulfilled, (state, action) => applyAuth(state, action.payload))
+      .addCase(signupAsync.rejected, (state, action) => {
         state.loading = false;
         state.error = (action.payload as string) ?? 'Signup failed';
       })
-      .addCase(logoutThunk.fulfilled, () => initialState)
-      .addCase(logoutThunk.rejected, () => initialState)
+      .addCase(logoutAsync.fulfilled, () => initialState)
+      .addCase(logoutAsync.rejected, () => initialState)
       .addCase(hydrateAuth.fulfilled, (state, action) => {
         if (action.payload) applyAuth(state, action.payload);
       });

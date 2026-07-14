@@ -1,4 +1,4 @@
-# CKPC React Native Architecture (Expo)
+# CPKC React Native Architecture (Expo)
 
 An Expo app organized with a **feature-sliced architecture**, adapted for the managed
 Expo workflow.
@@ -44,14 +44,14 @@ npm run start      # then press i / a, or scan with Expo Go dev build
 ```
 
 Copy `.env.example` to `.env` for local development. The checked-in example uses
-offline CKPC mock data by default:
+offline CPKC mock data by default:
 
 ```
 EXPO_PUBLIC_APP_ENV=development
 EXPO_PUBLIC_USE_REAL_API=false
 ```
 
-Use `.env.production.example` as the production template and set the real CKPC API
+Use `.env.production.example` as the production template and set the real CPKC API
 host before building a release. Production should keep `EXPO_PUBLIC_USE_REAL_API=true`.
 
 ## Localization
@@ -72,3 +72,5 @@ native module. To turn it on once you have your API certificate:
 4. fill `PINNED_HOSTS` with your host + SPKI SHA-256 hashes (include a backup pin)
 
 See the file header for the `openssl` command that generates the hashes.
+
+

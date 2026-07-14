@@ -1,11 +1,11 @@
 import { useCallback, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { isRequired, isValidEmail, isValidPassword } from '@/shared/utils';
-import { loginThunk, signupThunk, setError } from '../auth.slice';
+import { loginAsync, signupAsync, setError } from '../auth.slice';
 import type { LoginPayload, SignupPayload } from '../auth.types';
 
 /**
- * Screen-facing form logic for auth: local validation + dispatching thunks.
+ * Screen-facing form logic for auth: local validation + dispatching Toolkit async actions.
  * Server/auth state (loading, error) comes from the Redux slice.
  */
 export const useAuthForm = () => {
@@ -39,7 +39,7 @@ export const useAuthForm = () => {
         return;
       }
       setValidationError(null);
-      return dispatch(loginThunk(payload)).unwrap();
+      return dispatch(loginAsync(payload)).unwrap();
     },
     [dispatch],
   );
@@ -52,7 +52,7 @@ export const useAuthForm = () => {
         return;
       }
       setValidationError(null);
-      return dispatch(signupThunk(payload)).unwrap();
+      return dispatch(signupAsync(payload)).unwrap();
     },
     [dispatch],
   );

@@ -1,6 +1,6 @@
 <svg viewBox="0 0 960 730" width="960" height="730" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">
-  <title>CKPC React Native — application and API request workflow</title>
-  <desc>Top: app launch initializes interceptors and SSL, restores session/theme/language, then RootNavigator routes to Auth stack when signed out or Tabs when signed in. Bottom: an API request flows from UI screen to logic hook, splitting into Redux thunk for writes and React Query for reads, down through the service layer, axios interceptors, to the network or dev mock, with token attach, 401 refresh, and error toasts.</desc>
+  <title>CPKC React Native — application and API request workflow</title>
+  <desc>Top: app launch initializes interceptors and SSL, restores session/theme/language, then RootNavigator routes to Auth stack when signed out or Tabs when signed in. Bottom: an API request flows from UI screen to logic hook, splitting into Redux Toolkit for writes and React Query for reads, down through the service layer, axios interceptors, to the network or dev mock, with token attach, 401 refresh, and error toasts.</desc>
 
   <defs>
     <marker id="arN" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto">
@@ -72,7 +72,7 @@
   <text class="lbl" x="285" y="331" text-anchor="middle">Logic hook — useAuthForm / useHomeData</text>
 
   <rect class="box" x="60" y="374" width="210" height="46" rx="8"/>
-  <text class="lbl" x="165" y="392" text-anchor="middle">Redux thunk</text>
+  <text class="lbl" x="165" y="392" text-anchor="middle">Redux Toolkit</text>
   <text class="sub" x="165" y="408" text-anchor="middle">writes: login / signup</text>
 
   <rect class="box" x="300" y="374" width="210" height="46" rx="8"/>

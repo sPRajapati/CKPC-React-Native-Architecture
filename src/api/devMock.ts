@@ -1,6 +1,6 @@
 import type { AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 
-const TEST_EMAIL = 'demo@ckpc.dev';
+const TEST_EMAIL = 'demo@cpkc.dev';
 const TEST_PASSWORD = 'Password123';
 
 const ok = <T>(
@@ -17,7 +17,7 @@ const ok = <T>(
 const mockUser = {
   id: '1',
   email: TEST_EMAIL,
-  firstName: 'CKPC',
+  firstName: 'CPKC',
   lastName: 'Demo',
 };
 
@@ -36,13 +36,13 @@ const feedData = {
   data: [
     {
       id: 'dev-1',
-      title: 'CKPC mobile dashboard',
+      title: 'CPKC mobile dashboard',
       subtitle: 'Offline development feed powered by local mock data.',
     },
     {
       id: 'dev-2',
       title: 'Secure sign-in flow',
-      subtitle: 'Use demo@ckpc.dev and Password123 while developing without a backend.',
+      subtitle: 'Use demo@cpkc.dev and Password123 while developing without a backend.',
     },
     {
       id: 'dev-3',

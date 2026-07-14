@@ -1,18 +1,18 @@
 {
   "expo": {
-    "name": "CKPC RN Architecture",
-    "slug": "ckpc-rn-architecture",
+    "name": "CPKC RN Architecture",
+    "slug": "cpkc-rn-architecture",
     "version": "1.0.0",
     "orientation": "portrait",
-    "scheme": "ckpcrn",
+    "scheme": "cpkcrn",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.ckpc.rnarchitecture"
+      "bundleIdentifier": "com.cpkc.rnarchitecture"
     },
     "android": {
-      "package": "com.ckpc.rnarchitecture"
+      "package": "com.cpkc.rnarchitecture"
     },
     "plugins": [
       "expo-localization",

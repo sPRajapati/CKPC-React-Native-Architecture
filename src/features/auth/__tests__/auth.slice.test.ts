@@ -2,7 +2,7 @@ import authReducer, {
   clearAuth,
   setError,
   setTokens,
-  loginThunk,
+  loginAsync,
   hydrateAuth,
 } from '../auth.slice';
 import type { AuthData, LoginPayload } from '../auth.types';
@@ -20,7 +20,7 @@ describe('auth slice', () => {
   });
 
   it('applies auth on login fulfilled', () => {
-    const state = authReducer(undefined, loginThunk.fulfilled(authData, 'id', arg));
+    const state = authReducer(undefined, loginAsync.fulfilled(authData, 'id', arg));
     expect(state.token).toBe('token-123');
     expect(state.user?.email).toBe('user@example.com');
     expect(state.loading).toBe(false);
@@ -28,7 +28,7 @@ describe('auth slice', () => {
 
   it('sets error on login rejected', () => {
     const action = {
-      type: loginThunk.rejected.type,
+      type: loginAsync.rejected.type,
       payload: 'Login failed',
       error: {},
     };
@@ -36,14 +36,14 @@ describe('auth slice', () => {
   });
 
   it('resets state on clearAuth', () => {
-    const filled = authReducer(undefined, loginThunk.fulfilled(authData, 'id', arg));
+    const filled = authReducer(undefined, loginAsync.fulfilled(authData, 'id', arg));
     const cleared = authReducer(filled, clearAuth());
     expect(cleared.token).toBeNull();
     expect(cleared.user).toBeNull();
   });
 
   it('updates tokens via setTokens (refresh)', () => {
-    const filled = authReducer(undefined, loginThunk.fulfilled(authData, 'id', arg));
+    const filled = authReducer(undefined, loginAsync.fulfilled(authData, 'id', arg));
     const next = authReducer(filled, setTokens({ token: 'new-token', refreshToken: 'new-refresh' }));
     expect(next.token).toBe('new-token');
     expect(next.refreshToken).toBe('new-refresh');

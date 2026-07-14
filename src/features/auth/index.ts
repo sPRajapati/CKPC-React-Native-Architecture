@@ -2,9 +2,9 @@ export * from './screens';
 export * from './hooks';
 export * from './auth.types';
 export {
-  loginThunk,
-  signupThunk,
-  logoutThunk,
+  loginAsync,
+  signupAsync,
+  logoutAsync,
   hydrateAuth,
   clearAuth,
   setError,

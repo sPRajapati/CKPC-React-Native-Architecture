@@ -1,14 +1,14 @@
 import { ConfigContext, ExpoConfig } from 'expo/config';
 
 // Pick a brand at build time:  APP_BRAND=acme npx expo run:android
-type BrandKey = 'ckpc' | 'acme';
+type BrandKey = 'cpkc' | 'acme';
 
 const brands = {
-  ckpc: {
-    name: 'CKPC RN Architecture',
-    slug: 'ckpc-rn-architecture',
-    scheme: 'ckpcrn',
-    androidPackage: 'com.ckpc.rnarchitecture',
+  cpkc: {
+    name: 'CPKC RN Architecture',
+    slug: 'cpkc-rn-architecture',
+    scheme: 'cpkcrn',
+    androidPackage: 'com.cpkc.rnarchitecture',
     primaryColor: '#4C1D95',
   },
   acme: {
@@ -20,7 +20,7 @@ const brands = {
   },
 } as const;
 
-const brandKey = (process.env.APP_BRAND as BrandKey) || 'ckpc';
+const brandKey = (process.env.APP_BRAND as BrandKey) || 'cpkc';
 const brand = brands[brandKey];
 
 export default ({ config }: ConfigContext): ExpoConfig => ({

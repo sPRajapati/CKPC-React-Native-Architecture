@@ -7,8 +7,8 @@ export interface BrandConfig {
 }
 
 const fallback: BrandConfig = {
-  key: 'ckpc',
-  name: 'CKPC RN Architecture',
+  key: 'cpkc',
+  name: 'CPKC RN Architecture',
   primaryColor: '#4C1D95',
 };
 

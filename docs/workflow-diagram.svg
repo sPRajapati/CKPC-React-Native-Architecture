@@ -1,5 +1,5 @@
 <svg viewBox="0 0 960 730" width="960" height="730" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">
-  <title>CKPC React Native — application and API request workflow</title>
+  <title>CPKC React Native — application and API request workflow</title>
   <desc>Top: app launch initializes interceptors and SSL, restores session/theme/language, then RootNavigator routes to Auth stack when signed out or Tabs when signed in. Bottom: an API request flows from UI screen to logic hook, splitting into Redux Toolkit for writes and React Query for reads, down through the service layer, axios interceptors, to the network or dev mock, with token attach, 401 refresh, and error toasts.</desc>
 
   <defs>

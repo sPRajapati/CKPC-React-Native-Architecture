@@ -1,5 +1,5 @@
 import { store } from '@/store';
-import { clearAuth, logoutThunk } from '@/features/auth';
+import { clearAuth, logoutAsync } from '@/features/auth';
 import { storageUtils } from '@/shared/storage';
 
 interface LogoutOptions {
@@ -15,7 +15,7 @@ interface LogoutOptions {
  */
 export const coordinateLogout = async ({ callApi = true }: LogoutOptions = {}) => {
   if (callApi) {
-    await store.dispatch(logoutThunk());
+    await store.dispatch(logoutAsync());
     return;
   }
   store.dispatch(clearAuth());

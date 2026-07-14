@@ -20,7 +20,7 @@ UI (screen/components)
 Screen logic (hook: useAuthForm)      ← validation + orchestration
       │  dispatches
       ▼
-State (Redux slice + thunk)           ← client/session state
+State (Redux Toolkit slice)           ← client/session state
       │  calls
       ▼
 Service (feature .api.ts)             ← "what" endpoint, typed payload/response
@@ -51,18 +51,18 @@ instead of Redux — see [Server state](#server-state-react-query).
 - **Where:** `features/<f>/hooks/` (e.g. `useAuthForm.ts`)
 - **Responsibility:** validation, orchestration, and exposing a clean API
   (`login`, `signup`, `loading`, `error`, `clearError`) to the screen.
-- **Rule:** talks to the state layer (dispatch thunks / read selectors); never
+- **Rule:** talks to the state layer (dispatch Toolkit async actions / read selectors); never
   calls services or axios directly.
 - **Example:** `useAuthForm` validates the email/password with `shared/utils`,
-  then dispatches `loginThunk`.
+  then dispatches `loginAsync`.
 
-### 3. State — Redux slice + thunks
+### 3. State — Redux Toolkit slices
 - **Where:** `features/<f>/<f>.slice.ts`, typed hooks in `store/hooks.ts`
 - **Responsibility:** hold **client/session state** (auth token, user, loading,
-  error) and coordinate async work via `createAsyncThunk`.
-- **Rule:** the thunk calls the service; reducers only transform state from the
-  thunk lifecycle (`pending` / `fulfilled` / `rejected`).
-- **Example:** `auth.slice.ts` — `loginThunk` calls the service; `applyAuth`
+  error) and coordinate async work with Redux Toolkit.
+- **Rule:** the async action calls the service; reducers only transform state from the
+  async action lifecycle (`pending` / `fulfilled` / `rejected`).
+- **Example:** `auth.slice.ts` — `loginAsync` calls the service; `applyAuth`
   writes `token`/`user` into state on success.
 
 ### 4. Service — feature API modules
@@ -99,12 +99,12 @@ User types credentials on the Login screen and taps **Log in**.
 2. **Screen logic** — `useAuthForm.ts`
    `login()` runs `validateLogin()` (email format + password length via
    `shared/utils`). If invalid, it sets `validationError` and **returns early** —
-   no network call. If valid, it dispatches the thunk and returns its promise:
-   `dispatch(loginThunk(payload)).unwrap()`.
+   no network call. If valid, it dispatches the async action and returns its promise:
+   `dispatch(loginAsync(payload)).unwrap()`.
 
 3. **State** — `auth.slice.ts`
-   `loginThunk` fires. `loginThunk.pending` sets `loading = true`, clears `error`.
-   The thunk calls the service: `await login(payload)`.
+   `loginAsync` fires. `loginAsync.pending` sets `loading = true`, clears `error`.
+   The async action calls the service: `await login(payload)`.
 
 4. **Service** — `auth.api.ts`
    `api.post(AUTH_ENDPOINTS.LOGIN, payload)` — a typed POST returning
@@ -117,7 +117,7 @@ User types credentials on the Login screen and taps **Log in**.
 
 6. **Back up the stack — success**
    Service returns `{ success: true, data: { token, refreshToken, user } }`.
-   The thunk checks `success`, returns `data`. `loginThunk.fulfilled` runs
+   The async action checks `success`, returns `data`. `loginAsync.fulfilled` runs
    `applyAuth`, writing `token`, `refreshToken`, `user` into Redux and clearing
    `loading`/`error`.
 
@@ -129,8 +129,8 @@ User types credentials on the Login screen and taps **Log in**.
 ### Error path
 - **Validation error:** step 2 sets `validationError`; `useAuthForm` returns
   `error`, and `LoginScreen` shows it. No request is made.
-- **Server/network error:** the service throws → `loginThunk` catches it via
-  `rejectWithValue(getErrorMessage(err))` → `loginThunk.rejected` sets `error` and
+- **Server/network error:** the service throws → `loginAsync` catches it via
+  `rejectWithValue(getErrorMessage(err))` → `loginAsync.rejected` sets `error` and
   `loading = false` → the screen shows the message. `LoginScreen.onSubmit` also
   wraps the call in `try/catch` so the rejected promise never surfaces as an
   unhandled rejection.
@@ -144,7 +144,7 @@ sequenceDiagram
     participant U as User
     participant S as LoginScreen (UI)
     participant H as useAuthForm (logic)
-    participant R as auth.slice (Redux thunk)
+    participant R as auth.slice (Redux Toolkit)
     participant A as auth.api (service)
     participant X as axios + interceptors (transport)
     participant N as RootNavigator
@@ -155,7 +155,7 @@ sequenceDiagram
     alt invalid
         H-->>S: set error (no request)
     else valid
-        H->>R: dispatch(loginThunk).unwrap()
+        H->>R: dispatch(loginAsync).unwrap()
         R->>R: pending → loading = true
         R->>A: login(payload)
         A->>X: api.post(/auth/login)
@@ -179,7 +179,7 @@ Login uses **Redux** because the token/session is **client state we own**. Data 
 - `features/home/screens/HomeScreen.tsx` → consumes `data`, `isLoading`, `refetch`
 
 React Query gives caching, dedup, `staleTime`, retries, and pull-to-refresh for
-free — no thunk/slice/loading-flag boilerplate. **Rule of thumb:** server reads →
+free — no slice/loading-flag boilerplate. **Rule of thumb:** server reads →
 React Query; client/session/UI state → Redux.
 
 ---

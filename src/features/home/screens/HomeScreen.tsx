@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Screen, Button } from '@/shared/components';
 import { colors } from '@/shared/constants';
 import { useAppDispatch } from '@/store/hooks';
-import { logoutThunk } from '@/features/auth';
+import { logoutAsync } from '@/features/auth';
 import { useHomeData } from '../hooks';
 
 export const HomeScreen = () => {
@@ -32,7 +32,7 @@ export const HomeScreen = () => {
           )}
         />
       )}
-      <Button title="Log out" onPress={() => dispatch(logoutThunk())} />
+      <Button title="Log out" onPress={() => dispatch(logoutAsync())} />
     </Screen>
   );
 };

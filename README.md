@@ -43,7 +43,16 @@ npm install
 npm run start      # then press i / a, or scan with Expo Go dev build
 ```
 
-Set `EXPO_PUBLIC_API_URL` in a `.env` file (see `.env.example`).
+Copy `.env.example` to `.env` for local development. The checked-in example uses
+offline CKPC mock data by default:
+
+```
+EXPO_PUBLIC_APP_ENV=development
+EXPO_PUBLIC_USE_REAL_API=false
+```
+
+Use `.env.production.example` as the production template and set the real CKPC API
+host before building a release. Production should keep `EXPO_PUBLIC_USE_REAL_API=true`.
 
 ## Localization
 

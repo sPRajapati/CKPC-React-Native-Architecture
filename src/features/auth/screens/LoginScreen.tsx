@@ -16,7 +16,7 @@ export const LoginScreen = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<AuthStackParamList>>();
   const { login, loading, error, clearError } = useAuthForm();
-  const [email, setEmail] = useState(__DEV__ ? 'test@example.com' : '');
+  const [email, setEmail] = useState(__DEV__ ? 'demo@ckpc.dev' : '');
   const [password, setPassword] = useState(__DEV__ ? 'Password123' : '');
 
   const onChange = (setter: (v: string) => void) => (value: string) => {

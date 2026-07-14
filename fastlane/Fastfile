@@ -1,0 +1,15 @@
+default_platform(:ios)
+
+platform :ios do
+  desc "Build and upload an iOS beta once signing and App Store Connect keys are configured"
+  lane :beta do
+    build_app(scheme: "CPKCRNArchitecture")
+  end
+end
+
+platform :android do
+  desc "Build an Android beta once Play Console service-account keys are configured"
+  lane :beta do
+    gradle(task: "bundle", build_type: "Release", project_dir: "android")
+  end
+end

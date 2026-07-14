@@ -4,7 +4,7 @@ import {
   StyleSheet,
   Text,
 } from 'react-native';
-import { colors } from '@/shared/constants';
+import { colors, rpx } from '@/shared/constants';
 
 interface ButtonProps {
   title: string;
@@ -30,11 +30,11 @@ export const Button = ({ title, onPress, loading, disabled }: ButtonProps) => (
 const styles = StyleSheet.create({
   button: {
     backgroundColor: colors.primary,
-    borderRadius: 10,
-    paddingVertical: 14,
+    borderRadius: rpx(10),
+    paddingVertical: rpx(14),
     alignItems: 'center',
-    marginTop: 8,
+    marginTop: rpx(8),
   },
   disabled: { opacity: 0.6 },
-  label: { color: colors.white, fontSize: 16, fontWeight: '600' },
+  label: { color: colors.white, fontSize: rpx(16), fontWeight: '600' },
 });

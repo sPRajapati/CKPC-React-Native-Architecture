@@ -1,62 +1,36 @@
-import { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { useTranslation } from 'react-i18next';
 
 import { Screen, Button } from '@/shared/components';
-import { colors } from '@/shared/constants';
-import { APP_ROUTES } from '@/navigation/routes';
-import type { AuthStackParamList } from '@/navigation/types';
+import { colors, rpx } from '@/shared/constants';
 import { AuthField } from '../components';
-import { useAuthForm } from '../hooks';
+import { useSignupViewModel } from '../hooks';
 
 export const SignupScreen = () => {
-  const { t } = useTranslation();
-  const navigation =
-    useNavigation<NativeStackNavigationProp<AuthStackParamList>>();
-  const { signup, loading, error, clearError } = useAuthForm();
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-
-  const onChange = (setter: (v: string) => void) => (value: string) => {
-    clearError();
-    setter(value);
-  };
-
-  const onSubmit = async () => {
-    try {
-      await signup({ firstName, lastName, email, password });
-    } catch {
-      // failure is surfaced via `error`
-    }
-  };
+  const vm = useSignupViewModel();
 
   return (
     <Screen>
-      <Text style={styles.title}>{t('auth.signup')}</Text>
-      <AuthField label={t('auth.firstName')} value={firstName} onChangeText={onChange(setFirstName)} />
-      <AuthField label={t('auth.lastName')} value={lastName} onChangeText={onChange(setLastName)} />
+      <Text style={styles.title}>{vm.t('auth.signup')}</Text>
+      <AuthField label={vm.t('auth.firstName')} value={vm.firstName} onChangeText={vm.onFirstNameChange} />
+      <AuthField label={vm.t('auth.lastName')} value={vm.lastName} onChangeText={vm.onLastNameChange} />
       <AuthField
-        label={t('auth.email')}
-        value={email}
-        onChangeText={onChange(setEmail)}
+        label={vm.t('auth.email')}
+        value={vm.email}
+        onChangeText={vm.onEmailChange}
         keyboardType="email-address"
       />
       <AuthField
-        label={t('auth.password')}
-        value={password}
-        onChangeText={onChange(setPassword)}
+        label={vm.t('auth.password')}
+        value={vm.password}
+        onChangeText={vm.onPasswordChange}
         secureTextEntry
       />
-      {!!error && <Text style={styles.error}>{error}</Text>}
-      <Button title={t('auth.signup')} loading={loading} onPress={onSubmit} />
+      {!!vm.error && <Text style={styles.error}>{vm.error}</Text>}
+      <Button title={vm.t('auth.signup')} loading={vm.loading} onPress={vm.onSubmit} />
       <View style={styles.footer}>
-        <Text>{t('auth.hasAccount')} </Text>
-        <Text style={styles.link} onPress={() => navigation.navigate(APP_ROUTES.LOGIN)}>
-          {t('auth.login')}
+        <Text>{vm.t('auth.hasAccount')} </Text>
+        <Text style={styles.link} onPress={vm.goToLogin}>
+          {vm.t('auth.login')}
         </Text>
       </View>
     </Screen>
@@ -64,8 +38,8 @@ export const SignupScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  title: { fontSize: 28, fontWeight: '700', marginBottom: 24, color: colors.text },
-  error: { color: colors.error, marginBottom: 8 },
-  footer: { flexDirection: 'row', justifyContent: 'center', marginTop: 16 },
+  title: { fontSize: rpx(28), fontWeight: '700', marginBottom: rpx(24), color: colors.text },
+  error: { color: colors.error, marginBottom: rpx(8) },
+  footer: { flexDirection: 'row', justifyContent: 'center', marginTop: rpx(16) },
   link: { color: colors.primary, fontWeight: '600' },
 });

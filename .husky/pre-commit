@@ -1,1 +1,2 @@
-npm run typecheck
+yarn typecheck
+yarn secret-scan

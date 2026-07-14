@@ -1,4 +1,5 @@
 import { StyleSheet, View } from 'react-native';
+import { rpx } from '@/shared/constants';
 import { Text } from '../atoms/Text';
 
 interface UserStatProps {
@@ -16,6 +17,6 @@ export const UserStat = ({ label, value }: UserStatProps) => (
 );
 
 const styles = StyleSheet.create({
-  container: { alignItems: 'center', minWidth: 72 },
-  value: { fontSize: 22 },
+  container: { alignItems: 'center', minWidth: rpx(72) },
+  value: { fontSize: rpx(22) },
 });

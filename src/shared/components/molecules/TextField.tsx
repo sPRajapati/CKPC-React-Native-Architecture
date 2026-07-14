@@ -1,6 +1,6 @@
 import { StyleSheet, View } from 'react-native';
 import type { TextInputProps } from 'react-native';
-import { colors } from '@/shared/constants';
+import { colors, rpx } from '@/shared/constants';
 import { Text } from '../atoms/Text';
 import { Input } from '../atoms/Input';
 
@@ -25,8 +25,8 @@ export const TextField = ({ label, error, style, ...rest }: TextFieldProps) => (
 );
 
 const styles = StyleSheet.create({
-  wrapper: { marginBottom: 14 },
-  label: { marginBottom: 6 },
+  wrapper: { marginBottom: rpx(14) },
+  label: { marginBottom: rpx(6) },
   inputError: { borderColor: colors.error },
-  error: { color: colors.error, marginTop: 4 },
+  error: { color: colors.error, marginTop: rpx(4) },
 });

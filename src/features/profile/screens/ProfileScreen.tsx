@@ -1,22 +1,21 @@
 import { StyleSheet, View } from 'react-native';
 import { Screen, Avatar, Text, Card } from '@/shared/components';
-import { useProfile } from '../hooks/useProfile';
+import { useProfileViewModel } from '../hooks/useProfileViewModel';
 
 export const ProfileScreen = () => {
-  const { user, bio, stats } = useProfile();
-  const name = user ? `${user.firstName} ${user.lastName}` : 'Guest';
+  const vm = useProfileViewModel();
 
   return (
     <Screen>
       <View style={styles.header}>
-        <Avatar name={name} uri={user?.avatar} size={72} />
-        <Text variant="title">{name}</Text>
-        {user?.email ? <Text variant="caption">{user.email}</Text> : null}
+        <Avatar name={vm.name} uri={vm.user?.avatar} size={72} />
+        <Text variant="title">{vm.name}</Text>
+        {vm.user?.email ? <Text variant="caption">{vm.user.email}</Text> : null}
       </View>
-      <Text style={styles.bio}>{bio}</Text>
+      <Text style={styles.bio}>{vm.bio}</Text>
       <Card title="Stats">
         <View style={styles.stats}>
-          {stats.map((stat) => (
+          {vm.stats.map((stat) => (
             <View key={stat.label} style={styles.stat}>
               <Text variant="title">{String(stat.value)}</Text>
               <Text variant="caption">{stat.label}</Text>

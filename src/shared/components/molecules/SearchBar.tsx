@@ -1,7 +1,7 @@
 import { Search } from 'lucide-react-native';
 import { StyleSheet, View } from 'react-native';
 import type { TextInputProps } from 'react-native';
-import { colors } from '@/shared/constants';
+import { colors, rpx } from '@/shared/constants';
 import { Icon } from '../atoms/Icon';
 import { Input } from '../atoms/Input';
 
@@ -17,11 +17,11 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    gap: rpx(8),
     borderWidth: 1,
     borderColor: colors.border,
-    borderRadius: 10,
-    paddingHorizontal: 12,
+    borderRadius: rpx(10),
+    paddingHorizontal: rpx(12),
   },
   input: { flex: 1, borderWidth: 0, paddingHorizontal: 0 },
 });

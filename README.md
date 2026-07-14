@@ -72,3 +72,5 @@ native module. To turn it on once you have your API certificate:
 4. fill `PINNED_HOSTS` with your host + SPKI SHA-256 hashes (include a backup pin)
 
 See the file header for the `openssl` command that generates the hashes.
+
+

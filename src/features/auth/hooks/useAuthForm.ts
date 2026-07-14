@@ -18,18 +18,18 @@ export const useAuthForm = () => {
     if (error) dispatch(setError(null));
   }, [dispatch, error, validationError]);
 
-  const validateLogin = (payload: LoginPayload): string | null => {
+  const validateLogin = useCallback((payload: LoginPayload): string | null => {
     if (!isValidEmail(payload.email)) return 'Invalid email address';
     if (!isValidPassword(payload.password)) return 'Password must be at least 8 characters';
     return null;
-  };
+  }, []);
 
-  const validateSignup = (payload: SignupPayload): string | null => {
+  const validateSignup = useCallback((payload: SignupPayload): string | null => {
     if (!isRequired(payload.firstName) || !isRequired(payload.lastName)) {
       return 'First and last name are required';
     }
     return validateLogin(payload);
-  };
+  }, [validateLogin]);
 
   const login = useCallback(
     (payload: LoginPayload) => {
@@ -41,7 +41,7 @@ export const useAuthForm = () => {
       setValidationError(null);
       return dispatch(loginAsync(payload)).unwrap();
     },
-    [dispatch],
+    [dispatch, validateLogin],
   );
 
   const signup = useCallback(
@@ -54,7 +54,7 @@ export const useAuthForm = () => {
       setValidationError(null);
       return dispatch(signupAsync(payload)).unwrap();
     },
-    [dispatch],
+    [dispatch, validateSignup],
   );
 
   return {

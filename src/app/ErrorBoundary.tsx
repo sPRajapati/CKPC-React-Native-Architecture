@@ -11,19 +11,19 @@ interface State {
 }
 
 export class ErrorBoundary extends Component<Props, State> {
-  state: State = { hasError: false };
+  override state: State = { hasError: false };
 
   static getDerivedStateFromError(): State {
     return { hasError: true };
   }
 
-  componentDidCatch(error: Error, info: ErrorInfo) {
+  override componentDidCatch(error: Error, info: ErrorInfo) {
     monitoring.captureError(error, { componentStack: info.componentStack });
   }
 
   private reset = () => this.setState({ hasError: false });
 
-  render() {
+  override render() {
     if (this.state.hasError) {
       return (
         <View style={styles.container}>

@@ -1,5 +1,6 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { House, User, Settings as SettingsGlyph } from 'lucide-react-native';
+import { colors, rpx } from '@/shared/constants';
 import { HomeScreen } from '@/features/home';
 import { ProfileScreen } from '@/features/profile';
 import { SettingsScreen } from '@/features/settings';
@@ -9,7 +10,16 @@ import type { AppTabParamList } from './types';
 const Tab = createBottomTabNavigator<AppTabParamList>();
 
 export const BottomTabNavigator = () => (
-  <Tab.Navigator>
+  <Tab.Navigator
+    screenOptions={{
+      tabBarActiveTintColor: colors.primary,
+      tabBarInactiveTintColor: colors.muted,
+      tabBarLabelStyle: {
+        fontSize: rpx(12),
+        fontWeight: '600',
+      },
+    }}
+  >
     <Tab.Screen
       name={APP_ROUTES.HOME}
       component={HomeScreen}

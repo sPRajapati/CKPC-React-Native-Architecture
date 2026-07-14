@@ -14,12 +14,24 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
+      - name: Enable Corepack
+        run: |
+          corepack enable
+          corepack prepare yarn@3.6.4 --activate
+      - name: Cache Yarn
+        uses: actions/cache@v4
+        with:
+          path: |
+            .yarn/cache
+            .yarn/install-state.gz
+          key: yarn-${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+          restore-keys: |
+            yarn-${{ runner.os }}-
       - name: Install
-        run: npm ci --legacy-peer-deps
+        run: yarn install --immutable
       - name: Typecheck
-        run: npm run typecheck
+        run: yarn typecheck
       - name: Lint
-        run: npm run lint
+        run: yarn lint
       - name: Test
-        run: npm test -- --ci
+        run: yarn test --ci --watchman=false

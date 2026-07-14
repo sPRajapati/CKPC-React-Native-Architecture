@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { rpx } from '@/shared/constants';
 import { useTheme } from '@/shared/theme';
 import { subscribeToast, type ToastMessage, type ToastType } from './toast';
 
@@ -40,7 +41,7 @@ export const ToastHost = () => {
 };
 
 const styles = StyleSheet.create({
-  host: { position: 'absolute', left: 16, right: 16, bottom: 32, gap: 8 },
-  toast: { borderRadius: 10, paddingVertical: 12, paddingHorizontal: 16 },
-  text: { fontSize: 14, fontWeight: '500' },
+  host: { position: 'absolute', left: rpx(16), right: rpx(16), bottom: rpx(32), gap: rpx(8) },
+  toast: { borderRadius: rpx(10), paddingVertical: rpx(12), paddingHorizontal: rpx(16) },
+  text: { fontSize: rpx(14), fontWeight: '500' },
 });

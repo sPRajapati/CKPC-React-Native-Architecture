@@ -5,7 +5,7 @@
  * app runs normally without any native module. When you have your API's
  * certificate, enable it in three steps:
  *
- *   1. npm install react-native-ssl-public-key-pinning --legacy-peer-deps
+ *   1. yarn add react-native-ssl-public-key-pinning
  *   2. add "react-native-ssl-public-key-pinning" to `plugins` in app.json
  *   3. npx expo prebuild && npx expo run:android   (native module — not Expo Go)
  *

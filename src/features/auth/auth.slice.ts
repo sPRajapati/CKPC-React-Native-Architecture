@@ -59,15 +59,17 @@ export const logoutAsync = createAsyncThunk('auth/logout', async () => {
 });
 
 /** Restores a persisted session on app start. */
-export const hydrateAuth = createAsyncThunk<AuthData | null>(
+export const hydrateAuth = createAsyncThunk<AuthData | null, void>(
   'auth/hydrate',
-  async () => {
+  async (): Promise<AuthData | null> => {
     const [token, refreshToken, user] = await Promise.all([
       storageUtils.getAuthToken(),
       storageUtils.getRefreshToken(),
       storageUtils.getUser(),
     ]);
-    if (token && user) return { token, refreshToken: refreshToken ?? undefined, user };
+    if (token && user) {
+      return refreshToken ? { token, refreshToken, user } : { token, user };
+    }
     return null;
   },
 );

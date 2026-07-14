@@ -9,15 +9,19 @@ The app is **feature-sliced**: each feature (`auth`, `home`, …) owns its scree
 components, services, state slice, and types. Cutting across all features are a
 few shared layers: `api`, `store`, `navigation`, `i18n`, and `shared`.
 
-Within a feature, code is organized into **layers with a single direction of
-dependency** — UI depends on logic, logic depends on state, state depends on
-services, services depend on the transport layer. Nothing lower reaches back up.
+Within a feature, code is organized into **MVVM-style layers with a single
+direction of dependency** — UI depends on a ViewModel hook, the ViewModel depends
+on state/query hooks, state depends on services, and services depend on the
+transport layer. Nothing lower reaches back up.
 
 ```
 UI (screen/components)
       │  calls
       ▼
-Screen logic (hook: useAuthForm)      ← validation + orchestration
+ViewModel hook (useLoginViewModel)    ← screen state + orchestration
+      │  calls
+      ▼
+Feature logic hook (useAuthForm)      ← validation + async action boundary
       │  dispatches
       ▼
 State (Redux Toolkit slice)           ← client/session state
@@ -26,7 +30,7 @@ State (Redux Toolkit slice)           ← client/session state
 Service (feature .api.ts)             ← "what" endpoint, typed payload/response
       │  uses
       ▼
-Transport (axios instance + interceptors + endpoints)   ← "how" requests are sent
+Transport (apiRequest + axios + interceptors + endpoints)   ← "how" requests are sent
       │
       ▼
 Network  (real API, or __DEV__ mock)
@@ -41,13 +45,20 @@ instead of Redux — see [Server state](#server-state-react-query).
 
 ### 1. Presentation — screens & components
 - **Where:** `features/<f>/screens/`, `features/<f>/components/`, `shared/components/`
-- **Responsibility:** render UI, capture input, call the feature's logic hook.
-- **Rule:** no API calls, no business rules here. Screens hold only local UI state
-  (form field values) and delegate everything else.
-- **Example:** `features/auth/screens/LoginScreen.tsx` holds `email`/`password`
-  and calls `login()` from the hook.
+- **Responsibility:** render UI from a ViewModel.
+- **Rule:** a screen calls one screen-level ViewModel hook only. No direct API
+  calls, no direct Redux wiring, and no business rules in the screen.
+- **Example:** `features/auth/screens/LoginScreen.tsx` calls
+  `useLoginViewModel()` and renders the values/actions returned by it.
 
-### 2. Screen logic — feature hooks
+### 2. ViewModel — screen-facing hooks
+- **Where:** `features/<f>/hooks/use<X>ViewModel.ts`
+- **Responsibility:** compose navigation, translation, state/query hooks, form
+  state, and screen actions into one object for the screen.
+- **Rule:** screens do not compose several hooks themselves; the ViewModel owns
+  that composition.
+
+### 3. Screen logic — feature hooks
 - **Where:** `features/<f>/hooks/` (e.g. `useAuthForm.ts`)
 - **Responsibility:** validation, orchestration, and exposing a clean API
   (`login`, `signup`, `loading`, `error`, `clearError`) to the screen.
@@ -56,7 +67,7 @@ instead of Redux — see [Server state](#server-state-react-query).
 - **Example:** `useAuthForm` validates the email/password with `shared/utils`,
   then dispatches `loginAsync`.
 
-### 3. State — Redux Toolkit slices
+### 4. State — Redux Toolkit slices
 - **Where:** `features/<f>/<f>.slice.ts`, typed hooks in `store/hooks.ts`
 - **Responsibility:** hold **client/session state** (auth token, user, loading,
   error) and coordinate async work with Redux Toolkit.
@@ -65,19 +76,21 @@ instead of Redux — see [Server state](#server-state-react-query).
 - **Example:** `auth.slice.ts` — `loginAsync` calls the service; `applyAuth`
   writes `token`/`user` into state on success.
 
-### 4. Service — feature API modules
+### 5. Service — feature API modules
 - **Where:** `features/<f>/services/<f>.api.ts`
 - **Responsibility:** define *what* endpoint to hit and the typed request/response
   shape. One function per operation (`login`, `signup`, `logout`).
-- **Rule:** uses the shared `api` transport; contains no UI or state logic.
-- **Example:** `auth.api.ts` — `login()` does `api.post(AUTH_ENDPOINTS.LOGIN, payload)`.
+- **Rule:** uses `apiRequest()` only; contains no UI or state logic.
+- **Example:** `auth.api.ts` — `login()` calls `apiRequest()` with
+  `AUTH_ENDPOINTS.LOGIN`.
 
-### 5. Transport — axios instance, interceptors, endpoints
-- **Where:** `api/axios.ts`, `api/interceptors.ts`, `api/endpoints.ts`, `api/devMock.ts`
+### 6. Transport — one request entry point
+- **Where:** `api/request.ts`, `api/axios.ts`, `api/interceptors.ts`, `api/endpoints.ts`, `api/devMock.ts`
 - **Responsibility:** *how* requests are sent — base URL, timeout, attaching the
   auth token (request interceptor), handling `401` (response interceptor), and in
   `__DEV__`, returning mock responses so the app works with no backend.
-- **Rule:** interceptors are installed once at startup (`setupInterceptors()` in
+- **Rule:** feature services use `apiRequest()` as the single API-call entry
+  point. Interceptors are installed once at startup (`setupInterceptors()` in
   `App.tsx`), which is why `axios.ts` doesn't import the store (avoids a cycle).
 
 ### Cross-cutting layers
@@ -85,6 +98,11 @@ instead of Redux — see [Server state](#server-state-react-query).
   `state.auth.token`; `navigationRef` lets the `401` handler redirect to Login.
 - **`shared/`** — reusable components, `utils` (validation, error normalization),
   `types`, `constants`, `config` (env), `security` (SSL pinning).
+- **`shared/components`** — atomic design only: atoms inside `atoms/`, molecules
+  inside `molecules/`, organisms inside `organisms/`, templates inside
+  `templates/`.
+- **`shared/hoc`** — reusable cross-cutting component wrappers such as
+  `withLoader`.
 - **`i18n/`** — i18next with English + Spanish.
 
 ---
@@ -107,7 +125,8 @@ User types credentials on the Login screen and taps **Log in**.
    The async action calls the service: `await login(payload)`.
 
 4. **Service** — `auth.api.ts`
-   `api.post(AUTH_ENDPOINTS.LOGIN, payload)` — a typed POST returning
+   `apiRequest({ method: 'POST', url: AUTH_ENDPOINTS.LOGIN, data: payload })`
+   — a typed POST returning
    `ApiResponse<AuthData>`.
 
 5. **Transport** — `api/interceptors.ts` + `api/axios.ts`
@@ -158,7 +177,7 @@ sequenceDiagram
         H->>R: dispatch(loginAsync).unwrap()
         R->>R: pending → loading = true
         R->>A: login(payload)
-        A->>X: api.post(/auth/login)
+        A->>X: apiRequest(POST /auth/login)
         X-->>A: { success, data: { token, user } }
         A-->>R: response
         R->>R: fulfilled → applyAuth(token, user)

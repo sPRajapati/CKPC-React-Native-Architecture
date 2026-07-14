@@ -3,8 +3,8 @@ import { colors } from '@/shared/constants';
 import { Text } from '../atoms/Text';
 
 interface AvatarProps {
-  uri?: string;
-  name?: string;
+  uri?: string | undefined;
+  name?: string | undefined;
   size?: number;
 }
 

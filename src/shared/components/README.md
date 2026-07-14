@@ -19,5 +19,7 @@ Dependencies only ever point downward:
 3. organisms import molecules + atoms
 4. templates import any lower tier
 
+Reusable HOCs live outside atomic UI at `src/shared/hoc`.
+
 Consume everything from the barrel:
 `import { Button, TextField, Card, Screen } from '@/shared/components'`.

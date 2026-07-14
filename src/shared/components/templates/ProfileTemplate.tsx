@@ -4,8 +4,8 @@ import { Screen, ProfileHeader, ProfileStats } from '@/shared/components';
 
 interface ProfileTemplateProps {
   name: string;
-  email?: string;
-  avatar?: string;
+  email?: string | undefined;
+  avatar?: string | undefined;
   stats: { label: string; value: number | string }[];
   children?: ReactNode;
 }

@@ -5,7 +5,7 @@ web-build/
 android/
 ios/
 *.log
-.env
+# .env
 .env.local
 .env.development
 .env.production

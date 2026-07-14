@@ -4,8 +4,8 @@ import { Avatar } from '../molecules/Avatar';
 
 interface ProfileHeaderProps {
   name: string;
-  email?: string;
-  avatar?: string;
+  email?: string | undefined;
+  avatar?: string | undefined;
 }
 
 export const ProfileHeader = ({ name, email, avatar }: ProfileHeaderProps) => (

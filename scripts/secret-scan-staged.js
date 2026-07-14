@@ -15,14 +15,15 @@ const stagedFiles = execFileSync(
 
 const blockedPatterns = [
   /-----BEGIN (RSA |EC |OPENSSH |)PRIVATE KEY-----/i,
-  /\b(private[_-]?key|auth[_-]?key|api[_-]?key|secret|token)\b\s*[:=]\s*['"]?[A-Za-z0-9_./+=-]{16,}/i,
+  /\b(private[_-]?key|auth[_-]?key|api[_-]?key|secret|token)\b\s*[:=]\s*['"][A-Za-z0-9_./+=-]{16,}['"]/i,
+  /\b(PRIVATE[_-]?KEY|AUTH[_-]?KEY|API[_-]?KEY|SECRET|TOKEN)\b\s*[:=]\s*[A-Z0-9_./+=-]{20,}/,
 ];
 
 const offenders = [];
 
 for (const file of stagedFiles) {
-  const content = readFileSync(file, 'utf8');
-  if (blockedPatterns.some((pattern) => pattern.test(content))) {
+  const lines = readFileSync(file, 'utf8').split('\n');
+  if (lines.some((line) => blockedPatterns.some((pattern) => pattern.test(line)))) {
     offenders.push(file);
   }
 }

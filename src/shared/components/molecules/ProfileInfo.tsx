@@ -4,8 +4,8 @@ import { Avatar } from './Avatar';
 
 interface ProfileInfoProps {
   name: string;
-  email?: string;
-  avatar?: string;
+  email?: string | undefined;
+  avatar?: string | undefined;
 }
 
 export const ProfileInfo = ({ name, email, avatar }: ProfileInfoProps) => (

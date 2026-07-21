@@ -42,6 +42,9 @@ export const requestInterceptor = async (
     method: config.method,
     url: config.url,
     correlationId: nextCorrelationId,
+    requiresAuth: !publicRequest(config),
+    hasAccessToken: config.headers.has('Authorization'),
+    requestId: config.metadata?.requestId,
   });
 
   return config;

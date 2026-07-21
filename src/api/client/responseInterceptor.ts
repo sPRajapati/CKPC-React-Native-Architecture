@@ -27,7 +27,15 @@ export const createResponseInterceptor = (client: AxiosInstance) => ({
 
   rejected: async (error: AxiosError): Promise<AxiosResponse> => {
     const mock = resolveDevMock(error.config);
-    if (mock) return mock;
+    if (mock) {
+      safeApiLogger.mock({
+        method: error.config?.method,
+        url: error.config?.url,
+        status: mock.status,
+        correlationId: error.config?.metadata?.correlationId,
+      });
+      return mock;
+    }
 
     const original = error.config;
     if (!original) throw mapToApiError(error);
@@ -41,18 +49,51 @@ export const createResponseInterceptor = (client: AxiosInstance) => ({
 
     if (shouldRefresh) {
       original._retry = true;
+      safeApiLogger.refresh({
+        method: original.method,
+        url: original.url,
+        status,
+        phase: 'start',
+        correlationId: original.metadata?.correlationId,
+      });
       const session = await refreshTokenOnce();
       if (session?.accessToken) {
         original.headers?.set('Authorization', `Bearer ${session.accessToken}`);
+        safeApiLogger.refresh({
+          method: original.method,
+          url: original.url,
+          status,
+          phase: 'success',
+          correlationId: original.metadata?.correlationId,
+        });
         return client(original);
       }
+      safeApiLogger.refresh({
+        method: original.method,
+        url: original.url,
+        status,
+        phase: 'failed',
+        correlationId: original.metadata?.correlationId,
+      });
       await expireSessionOnce();
     }
 
     if (status !== 401 && shouldRetryRequest(error, original)) {
       original._retryCount = (original._retryCount ?? 0) + 1;
       const retryAfter = error.response?.headers?.['retry-after'];
-      await delay(getRetryDelayMs(original._retryCount, String(retryAfter ?? '')));
+      const retryDelayMs = getRetryDelayMs(
+        original._retryCount,
+        String(retryAfter ?? ''),
+      );
+      safeApiLogger.retry({
+        method: original.method,
+        url: original.url,
+        status,
+        retryCount: original._retryCount,
+        retryDelayMs,
+        correlationId: original.metadata?.correlationId,
+      });
+      await delay(retryDelayMs);
       return client(original);
     }
 

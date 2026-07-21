@@ -1,4 +1,5 @@
 import { logger } from '@/shared/utils/logger';
+import { ENV } from '@/shared/config';
 
 const sensitiveKeys = new Set([
   'authorization',
@@ -24,14 +25,38 @@ export const redactSensitiveData = (value: unknown): unknown => {
   );
 };
 
+const isApiLogEnabled = (): boolean =>
+  __DEV__ && ENV.APP_ENV === 'development' && process.env.NODE_ENV !== 'test';
+
+const writeApiLog = (
+  level: 'debug' | 'info' | 'warn',
+  message: string,
+  fields: Record<string, unknown>,
+): void => {
+  if (!isApiLogEnabled()) return;
+  logger[level](message, redactSensitiveData(fields));
+};
+
 export const safeApiLogger = {
   request: (fields: Record<string, unknown>): void => {
-    logger.debug('api request', redactSensitiveData(fields));
+    writeApiLog('debug', 'api request', fields);
   },
   response: (fields: Record<string, unknown>): void => {
-    logger.debug('api response', redactSensitiveData(fields));
+    writeApiLog('debug', 'api response', fields);
+  },
+  retry: (fields: Record<string, unknown>): void => {
+    writeApiLog('info', 'api retry', fields);
+  },
+  refresh: (fields: Record<string, unknown>): void => {
+    writeApiLog('info', 'api auth refresh', fields);
+  },
+  mock: (fields: Record<string, unknown>): void => {
+    writeApiLog('debug', 'api dev mock', fields);
+  },
+  validation: (fields: Record<string, unknown>): void => {
+    writeApiLog('warn', 'api validation', fields);
   },
   error: (fields: Record<string, unknown>): void => {
-    logger.warn('api error', redactSensitiveData(fields));
+    writeApiLog('warn', 'api error', fields);
   },
 };

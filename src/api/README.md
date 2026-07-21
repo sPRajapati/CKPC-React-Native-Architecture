@@ -99,6 +99,11 @@ status, duration, correlation ID, error code, and retry count.
 Never log authorization headers, tokens, cookies, passwords, MFA values, SAML
 assertions, or sensitive request/response bodies.
 
+Local development logs are emitted only when `__DEV__` is true,
+`EXPO_PUBLIC_APP_ENV=development`, and the process is not running Jest. You will
+see API lifecycle events such as request, response, dev mock, retry, refresh,
+validation, and normalized error logs in the Metro console.
+
 ## Backend Assumptions
 
 The repo currently has demo auth endpoints and no concrete Cognito hosted UI,

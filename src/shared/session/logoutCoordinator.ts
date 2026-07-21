@@ -1,6 +1,7 @@
 import { store } from '@/store';
-import { clearAuth, logoutAsync } from '@/features/auth';
+import { clearAuth, logoutAsync } from '@/features/auth/auth.slice';
 import { storageUtils } from '@/shared/storage';
+import { clearUserQueryData } from '@/api/queryClient';
 
 interface LogoutOptions {
   // true  = user-initiated (calls the logout endpoint)
@@ -16,8 +17,10 @@ interface LogoutOptions {
 export const coordinateLogout = async ({ callApi = true }: LogoutOptions = {}) => {
   if (callApi) {
     await store.dispatch(logoutAsync());
+    await clearUserQueryData();
     return;
   }
   store.dispatch(clearAuth());
   await storageUtils.clearAuthData();
+  await clearUserQueryData();
 };

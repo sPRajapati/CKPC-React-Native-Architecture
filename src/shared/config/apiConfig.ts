@@ -4,6 +4,11 @@ import { ENV } from './env';
 // Production env files should set it to true so hosted APIs are used.
 export const USE_REAL_API = ENV.USE_REAL_API;
 
+export const API_CONFIG = {
+  BASE_URL: ENV.API_URL,
+  REQUEST_TIMEOUT_MS: ENV.REQUEST_TIMEOUT_MS,
+} as const;
+
 export const REAL_API = {
   FEED_URL: ENV.FEED_URL,
 } as const;

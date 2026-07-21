@@ -1,5 +1,11 @@
 export { api } from './axios';
 export { apiRequest } from './request';
 export { setupInterceptors } from './interceptors';
+export { createAbortController, cancelActiveApiRequests } from './client/requestCancellation';
+export { ApiError } from './errors/ApiError';
+export { isApiError } from './errors/isApiError';
+export { mapToApiError } from './errors/apiErrorMapper';
+export { tokenManager } from './auth/tokenManager';
 export * from './endpoints';
 export * from './queryClient';
+export * from './types';

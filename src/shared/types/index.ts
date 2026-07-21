@@ -8,7 +8,7 @@ export interface User {
 
 export interface ApiResponse<T> {
   success: boolean;
-  message?: string;
+  message?: string | undefined;
   data: T;
 }
 

@@ -34,6 +34,7 @@
     "expo-secure-store": "^56.0.4",
     "expo-status-bar": "^56.0.4",
     "i18next": "^23.15.1",
+    "intl-pluralrules": "^2.0.1",
     "lucide-react-native": "^1.21.0",
     "react": "19.2.3",
     "react-dom": "19.2.3",
@@ -43,7 +44,8 @@
     "react-native-screens": "^4.25.2",
     "react-native-svg": "15.15.4",
     "react-native-web": "^0.21.2",
-    "react-redux": "^9.3.0"
+    "react-redux": "^9.3.0",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@babel/core": "^7.28.5",

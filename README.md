@@ -13,8 +13,9 @@ Expo workflow.
 - **Shared, not global.** Cross-feature building blocks live in `src/shared/`
   (components, hooks, utils, types, constants). App-wide plumbing lives in
   `src/api`, `src/store`, `src/navigation`, `src/i18n`.
-- **One API entry.** Feature services call `apiRequest()` from `src/api/request.ts`.
-  Axios/interceptors stay centralized.
+- **One secure API entry.** Feature services call `apiRequest()` from
+  `src/api/request.ts`. Axios, auth headers, correlation IDs, retries, refresh,
+  cancellation, error normalization, and response validation stay centralized.
 - **State split.** Redux Toolkit holds client/app state (slices per feature).
   React Query owns server state (see `features/home`), so we don't hand-roll
   caching/loading in Redux.
@@ -32,7 +33,7 @@ Expo workflow.
 
 ```
 src/
-  api/            apiRequest entry point, axios instance, endpoints, query client
+  api/            secure API layer, axios instance, errors, validation, query client
   store/          configureStore + typed hooks (slices live in features)
   navigation/     RootNavigator, Auth/App navigators, navigationRef, routes
   i18n/           i18next setup + locales
@@ -113,6 +114,39 @@ host before building a release. Production should keep `EXPO_PUBLIC_USE_REAL_API
 `src/i18n` uses i18next with **English (`en`)** and **Spanish (`es`)**. The device
 language is auto-detected and falls back to English. Add a language by dropping a
 `locales/<lng>.json` file and registering it in `src/i18n/index.ts`.
+
+React Native runtimes may not provide `Intl.PluralRules`, which i18next uses for
+plural handling. The app imports `intl-pluralrules` before initializing i18next
+to avoid plural resolver fallback warnings.
+
+## API and authentication
+
+`src/api` is the single API boundary for calls that should eventually go through:
+
+```
+IBM ISAM/ISVA authentication -> Cognito-issued access token -> API Gateway
+```
+
+The mobile app must only receive, securely store, refresh, and send Cognito-issued
+tokens. It must not generate/sign JWTs, include Cognito client secrets, or expose
+AWS/Lambda/Boomi credentials or internal Boomi endpoints.
+
+Feature services should call `apiRequest()` and optionally pass request metadata:
+
+```ts
+apiRequest<MyResponse>({
+  method: 'GET',
+  url: '/home/feed',
+  metadata: {
+    responseSchema: mySchema,
+    retryPolicy: { maxRetries: 2 },
+  },
+});
+```
+
+Use `metadata: { requiresAuth: false, skipAuthRefresh: true }` for explicit public
+requests such as login, signup, and refresh. See `src/api/README.md` for the full
+request, refresh, validation, and error flow.
 
 ## Security — SSL pinning
 
